@@ -1,0 +1,32 @@
+{{ if .Values.storageTerraNFS -}}
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ include "common.fullname" . }}-nfs
+spec:
+  capacity:
+    storage: 50Gi
+  storageClassName: storage-terra-helm-nfs
+  accessModes:
+    - ReadWriteMany
+  nfs:
+    server: storage.terra.fap.no
+    path: /storage/nfs/k8s/{{ include "common.fullname" . }}
+  mountOptions:
+      - "nfsvers=4"
+      - "nolock"
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "common.fullname" . }}-nfs
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: storage-terra-helm-nfs
+  resources:
+    requests:
+      storage: 50Gi
+{{- end }}

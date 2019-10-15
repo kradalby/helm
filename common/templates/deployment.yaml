@@ -1,0 +1,87 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "common.fullname" . }}
+  labels:
+{{ include "common.labels" . | indent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "common.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "common.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+    {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      {{ if or .Values.storageTerraNFS .Values.configmap -}}
+      volumes:
+      {{ if .Values.storageTerraNFS -}}
+      - name: {{ include "common.fullname" . }}-pvc
+        persistentVolumeClaim:
+            claimName: {{ include "common.fullname" . }}-nfs
+      {{- end }}
+      {{- if .Values.configmap }}
+      - name: configmapping
+        configMap:
+          name: {{ include "common.fullname" . }}
+      {{- end }}
+      {{- end }}
+
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+
+          {{ if or .Values.storageTerraNFS .Values.configmap -}}
+          volumeMounts:
+          {{ if .Values.storageTerraNFS -}}
+          - name: {{ include "common.fullname" . }}-pvc
+            mountPath: {{ .Values.storageTerraNFS.containerPath }}
+          {{- end }}
+          {{- if .Values.configmapping }}
+          {{- range .Values.configmapping }}
+          - name: configmapping
+            mountPath: {{ .mountPath }}
+            subPath: {{ .configMapKey }}
+            readOnly: true
+          {{- end }}
+          {{- end }}
+          {{- end }}
+
+          ports:
+            - name: http
+              containerPort: {{ .Values.container.port }}
+              protocol: TCP
+          {{ if .Values.liveness -}}
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          {{- end }}
+          {{ if .Values.readiness -}}
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+          {{- end }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}

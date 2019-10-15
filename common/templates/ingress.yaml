@@ -1,0 +1,22 @@
+{{- $fullName := include "common.fullname" . -}}
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: {{ $fullName }}
+  labels:
+{{ include "common.labels" . | indent 4 }}
+  annotations:
+{{ include "common.annotations" . | indent 4 }}
+spec:
+  tls:
+  - hosts:
+    - {{ .Values.domain }}
+    secretName: {{ .Values.domain | replace "." "-"}}-tls
+  rules:
+  - host: {{ .Values.domain }}
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: {{ $fullName }}
+          servicePort: sport
