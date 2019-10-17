@@ -18,6 +18,8 @@ fullnameOverride: ""
 readiness: false
 liveness: false
 
+useHttpACME: false
+
 container:
   port: 5000
 service:
