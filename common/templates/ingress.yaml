@@ -5,6 +5,9 @@ metadata:
   name: {{ $fullName }}
   labels:
 {{ include "common.labels" . | indent 4 }}
+    {{ if .Values.useHttpACME -}}
+    use-http-solver: "true"
+    {{- end }}
   annotations:
 {{ include "common.annotations" . | indent 4 }}
 spec:
