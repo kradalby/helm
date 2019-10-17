@@ -1,0 +1,30 @@
+---
+kind: pipeline
+name: default
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: lint
+  pull: always
+  image: alpine/helm:latest
+  commands:
+    - helm lint common
+
+- name: notify
+  pull: if-not-exists
+  image: drillster/drone-email
+  settings:
+    from: drone@drone.fap.no
+    host: smtp.fap.no
+    port: 25
+    recipients:
+    - kradalby@kradalby.no
+    skip_verify: true
+  when:
+    status:
+    - success
+    - changed
+    - failure
