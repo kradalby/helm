@@ -7,11 +7,11 @@ platform:
   arch: amd64
 
 steps:
-- name: lint
+- name: test
   pull: always
-  image: alpine/helm:latest
+  image: quay.io/helmpack/chart-testing:latest 
   commands:
-    - helm lint common
+    - ct lint --validate-maintainers=false --charts common
 
 - name: notify
   pull: if-not-exists
