@@ -37,6 +37,10 @@ spec:
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          {{ with .Values.env -}}
+          env:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
 
           {{ if or .Values.storageTerraNFS .Values.configmap -}}
