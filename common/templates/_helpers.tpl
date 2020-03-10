@@ -38,6 +38,7 @@ Create chart name and version as used by the chart label.
 Common labels
 */}}
 {{- define "common.labels" -}}
+app: {{ include "common.name" . }}
 app.kubernetes.io/name: {{ include "common.name" . }}
 helm.sh/chart: {{ include "common.chart" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
