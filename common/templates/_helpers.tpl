@@ -50,5 +50,5 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- define "common.annotations" -}}
 ingress.kubernetes.io/ssl-redirect: "true"
 kubernetes.io/ingress.class: "nginx"
-certmanager.k8s.io/cluster-issuer: "letsencrypt-production"
+cert-manager.io/cluster-issuer: "letsencrypt-production"
 {{- end -}}
