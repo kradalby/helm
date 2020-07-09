@@ -1,4 +1,4 @@
-{{ if .Values.storageTerraNFS -}}
+{{ if .Values.terraNfs -}}
 ---
 apiVersion: v1
 kind: PersistentVolume
@@ -7,12 +7,12 @@ metadata:
 spec:
   capacity:
     storage: 50Gi
-  storageClassName: storage-terra-helm-nfs
+  storageClassName: terra-helm-nfs
   accessModes:
     - ReadWriteMany
   nfs:
-    server: storage.terra.fap.no
-    path: /storage/nfs/k8s/{{ include "common.fullname" . }}
+    server: nfs.terra.fap.no
+    path: /nfs/kubernetes/{{ include "common.fullname" . }}
   mountOptions:
       - "nfsvers=4"
       - "nolock"
@@ -25,7 +25,7 @@ metadata:
 spec:
   accessModes:
     - ReadWriteMany
-  storageClassName: storage-terra-helm-nfs
+  storageClassName: terra-helm-nfs
   resources:
     requests:
       storage: 50Gi

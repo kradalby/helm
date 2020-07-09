@@ -20,9 +20,9 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
     {{- end }}
-      {{ if or .Values.storageTerraNFS .Values.configmap -}}
+      {{ if or .Values.terraNfs .Values.configmap -}}
       volumes:
-      {{ if .Values.storageTerraNFS -}}
+      {{ if .Values.terraNfs -}}
       - name: {{ include "common.fullname" . }}-pvc
         persistentVolumeClaim:
             claimName: {{ include "common.fullname" . }}-nfs
@@ -35,7 +35,7 @@ spec:
       {{- end }}
 
       containers:
-        - name: {{ .Chart.Name }}
+        - name: {{ include "common.fullname" . }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           {{ with .Values.env -}}
           env:
@@ -43,11 +43,11 @@ spec:
           {{- end }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
 
-          {{ if or .Values.storageTerraNFS .Values.configmap -}}
+          {{ if or .Values.terraNfs .Values.configmap -}}
           volumeMounts:
-          {{ if .Values.storageTerraNFS -}}
+          {{ if .Values.terraNfs -}}
           - name: {{ include "common.fullname" . }}-pvc
-            mountPath: {{ .Values.storageTerraNFS.containerPath }}
+            mountPath: {{ .Values.terraNfs.containerPath }}
           {{- end }}
           {{- if .Values.configmapping }}
           {{- range .Values.configmapping }}

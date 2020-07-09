@@ -26,13 +26,10 @@ service:
   type: ClusterIP
   port: 80
 
-# storageTerraNFS:
-#   containerPath: /stuff
-
 
 env: []
 
-storageTerraNFS: {}
+terraNfs: {}
 configmap: {}
 configmapping: {}
 # configmap: |
