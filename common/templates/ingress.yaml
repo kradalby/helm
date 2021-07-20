@@ -25,4 +25,4 @@ spec:
           service:
             name: {{ $fullName }}
             port:
-              name: sport
+              name: web

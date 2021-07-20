@@ -13,7 +13,7 @@ spec:
     - port: {{ .Values.service.port }}
       targetPort: {{ .Values.container.port }}
       protocol: TCP
-      name: sport
+      name: web
   selector:
     app.kubernetes.io/name: {{ include "common.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
