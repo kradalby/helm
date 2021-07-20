@@ -23,9 +23,11 @@ useHttpACME: false
 container:
   port: 5000
 service:
+  metrics: false
   type: ClusterIP
   port: 80
 
+metallbService: {}
 
 env: []
 

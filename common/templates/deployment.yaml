@@ -25,8 +25,8 @@ spec:
       {{ if .Values.terraNfs -}}
       - name: {{ include "common.fullname" . }}-nfs
         nfs:
-          server: nfs.terra.fap.no
-          path: /nfs/kubernetes/{{ include "common.fullname" . }}
+          server: core.terra.fap.no
+          path: /fastest/nfs/kubernetes/{{ include "common.fullname" . }}
       {{- end }}
       {{- if .Values.configmap }}
       - name: configmapping

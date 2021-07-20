@@ -3,7 +3,10 @@ kind: Service
 metadata:
   name: {{ include "common.fullname" . }}
   labels:
-{{ include "common.labels" . | indent 4 }}
+    {{ if .Values.service.metrics -}}
+    metrics: true
+    {{- end }}
+    {{- include "common.labels" . | nindent 4 }}
 spec:
   type: {{ .Values.service.type }}
   ports:

@@ -51,4 +51,5 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 ingress.kubernetes.io/ssl-redirect: "true"
 kubernetes.io/ingress.class: "nginx"
 cert-manager.io/cluster-issuer: "letsencrypt-production"
+# nginx.ingress.kubernetes.io/enable-opentracing: "true"
 {{- end -}}

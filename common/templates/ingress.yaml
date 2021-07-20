@@ -1,5 +1,5 @@
 {{- $fullName := include "common.fullname" . -}}
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: {{ $fullName }}
@@ -20,6 +20,9 @@ spec:
     http:
       paths:
       - path: /
+        pathType: Prefix
         backend:
-          serviceName: {{ $fullName }}
-          servicePort: sport
+          service:
+            name: {{ $fullName }}
+            port:
+              name: sport

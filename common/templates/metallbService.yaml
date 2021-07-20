@@ -1,0 +1,21 @@
+{{- if .Values.metallbService -}}
+{{- range .Values.metallbService.ports -}}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ list (include "common.fullname" $) .name (.protocol | lower) | join "-" }}
+  labels:
+{{ include "common.labels" $ | indent 4 }}
+  annotations:
+    metallb.universe.tf/allow-shared-ip: {{ include "common.fullname" $ }}
+spec:
+  type: LoadBalancer
+  loadBalancerIP: {{ $.Values.metallbService.ip }}
+  selector:
+    app.kubernetes.io/name: {{ include "common.name" $ }}
+    app.kubernetes.io/instance: {{ $.Release.Name }}
+  ports:
+    {{- . | list | toYaml | nindent 4 }}
+{{ end }}
+{{- end }}
