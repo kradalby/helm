@@ -3,8 +3,8 @@ kind: Service
 metadata:
   name: {{ include "common.fullname" . }}
   labels:
-    {{ if .Values.service.metrics -}}
-    metrics: true
+    {{ with .Values.service.metrics -}}
+    metrics: "true"
     {{- end }}
     {{- include "common.labels" . | nindent 4 }}
 spec:
